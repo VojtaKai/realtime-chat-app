@@ -1,20 +1,22 @@
 import express from 'express'
-import * as socketio from 'socket.io'
-import * as http from 'http'
+import { createServer } from 'http'
+import { Server } from 'socket.io'
 import { router } from './router'
+import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from './utils/interfaces'
+
 
 const PORT = Number(process.env.PORT) || 3000
 
 const app = express()
-const server = http.createServer(app)
-const io = new socketio.Server(server)
+const server = createServer(app)
+const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>(server)
 
-app.get('/', (req, res, next) => {
-    console.log('here')
-})
-
-io.on('connnection', (socket) => {
+io.on('connection', (socket) => {
     console.log('connected', socket)
+
+    socket.on('disconnect', () => {
+        console.log('User has left!')
+    })
 })
 
 app.use(router)

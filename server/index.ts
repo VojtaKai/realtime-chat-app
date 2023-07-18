@@ -3,6 +3,7 @@ import { createServer } from 'http'
 import { Server } from 'socket.io'
 import { router } from './router'
 import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from './utils/interfaces'
+import { addUser } from './users'
 
 
 const PORT = Number(process.env.PORT) || 3000
@@ -18,29 +19,33 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
 })
 
 io.on('connection', (socket) => {
-    console.log('USER CONNECTED')
+    socket.on('join', (name, room, cb) => {
+        try {
+            const addedUser = addUser(socket.id, name, room)
+            
+            // socket.join adds users to a specific room - room is an independent space from other rooms
+            // to leave a room perform socket.leave(room)
+            socket.join(addedUser.room)
+
+
+            socket.emit('message', {
+                user: 'admin',
+                text: `Welcome to the room ${addedUser.room}, ${addedUser.name}!`
+            })
+
+            // socket.broadcast - to everyone except the socketId that joined, to ALL the rooms
+            // socket.broadcast.to(room) === socket.to(room) - to everyone in the room except the socketId
+            socket.to(addedUser.room).emit('message', {
+                user: 'admin',
+                text: `User ${addedUser.name} has joined!`
+            })
+        } catch (error: any) {
+            return cb(error.message)
+        }
+    })
 
     socket.on('disconnect', () => {
         console.log('User has left!')
-    })
-
-    console.log('socket id', socket.id)
-
-    io.emit('gotcha', 'randomMessage', 10)
-
-    socket.on('hello', () => {
-        console.log('Hello called')
-    })
-
-    socket.on('join', (name, room, cb) => {
-        console.log('From FE - name', name)
-        console.log('From FE - room', room)
-
-        // const error = true
-
-        // if (error) {
-        //     cb('Error Message')
-        // }
     })
 })
 

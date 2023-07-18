@@ -1,12 +1,8 @@
 export interface ServerToClientEvents {
-    noArg: () => void;
-    basicEmit: (a: number, b: string, c: Buffer) => void;
-    withAck: (d: string, callback: (e: number) => void) => void;
-    gotcha: (message: string, number: number) => void;
+    message: (payload: MessagePayload) => void;
   }
   
 export interface ClientToServerEvents {
-    hello: () => void;
     join: (name: string, room: string, cb: (error: string) => void) => void
 }
   
@@ -17,4 +13,15 @@ export interface InterServerEvents {
 export interface SocketData {
     name: string;
     age: number;
+}
+
+export interface User {
+    socketId: string,
+    name: string,
+    room: string
+}
+
+export interface MessagePayload {
+    user: string;
+    text: string
 }

@@ -24,8 +24,23 @@ io.on('connection', (socket) => {
         console.log('User has left!')
     })
 
+    console.log('socket id', socket.id)
+
+    io.emit('gotcha', 'randomMessage', 10)
+
     socket.on('hello', () => {
         console.log('Hello called')
+    })
+
+    socket.on('join', (name, room, cb) => {
+        console.log('From FE - name', name)
+        console.log('From FE - room', room)
+
+        // const error = true
+
+        // if (error) {
+        //     cb('Error Message')
+        // }
     })
 })
 

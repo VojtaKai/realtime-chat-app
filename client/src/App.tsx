@@ -7,19 +7,18 @@ import { ErrorElement } from './components/Error'
 
 
 function App() {
-  const router = createBrowserRouter([{
-    path: "/",
-    element: <Join />,
-    errorElement: <ErrorElement />
-  },
-  {
-    path: '/chat',
-    element: <Chat /> ,
-    errorElement: <ErrorElement />
-  }
-])
-
-
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Join />,
+      errorElement: <ErrorElement />
+    },
+    {
+      path: '/chat',
+      element: <Chat /> ,
+      errorElement: <ErrorElement />
+    }
+  ])
 
   return <RouterProvider router={router} fallbackElement={<ErrorElement />} />
 }

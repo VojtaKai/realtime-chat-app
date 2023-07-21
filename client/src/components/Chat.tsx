@@ -2,6 +2,7 @@ import * as React from 'react'
 import { useLocation } from 'react-router-dom'
 import classes from './Chat.module.css'
 import { io, Socket } from 'socket.io-client'
+import ScrollToTheBottom from 'react-scroll-to-bottom';
 
 export interface ServerToClientEvents {
     message: (payload: MessagePayload) => void;
@@ -85,8 +86,9 @@ export const Chat = () => {
         })
     }, [socket])
 
-    const onClickSend = () => {
+    const onClickSend = (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent<HTMLTextAreaElement>) => {
         console.log('sendMessage', message)
+        e.preventDefault()
         if (!message) {
             return
         }
@@ -99,16 +101,11 @@ export const Chat = () => {
     
     return (
         <div className={classes.chatWindowOuter}>
-            <div className={classes.chatWindowInner}>
+            <ScrollToTheBottom className={classes.chatWindowInner} mode='bottom' scrollViewClassName={classes.chatWindowInnerChildren} >
                 {messages.map(message => <Message user={message.user} text={message.text} key={Math.random().toString()} isOwner={isOwner(name, message.user) } />)}
-            </div>
+            </ScrollToTheBottom>
             <div className={classes.messageInputEnvelope}>
-                <textarea className={classes.messageTextArea} onChange={(e) => setMessage(e.target.value)} value={message} onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                        e.preventDefault()
-                        onClickSend()
-                    }
-                }} />
+                <textarea className={classes.messageTextArea} onChange={(e) => setMessage(e.target.value)} placeholder='Type a message' value={message} onKeyDown={(e) => e.key === 'Enter' && onClickSend(e)} />
                 <button type='button' onClick={onClickSend} className={classes.messageSendButton}>{'Send'}</button>
             </div>
         </div>

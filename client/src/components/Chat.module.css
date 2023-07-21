@@ -14,11 +14,15 @@
 }
 
 .chatWindowInner {
-    height: 100%;
+    height: 90%;
     width: 100%;
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
+}
+
+.chatWindowInnerChildren {
+    display: flex;
+    flex-direction: column;
 }
 
 .messageEnvelopeRight {
@@ -26,7 +30,6 @@
     width: 80%;
     margin: 10px;
     padding: 0px 10px;
-    position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;

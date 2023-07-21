@@ -8,7 +8,8 @@ export interface ServerToClientEvents {
   }
   
 export interface ClientToServerEvents {
-    join: (name: string, room: string, cb: (error: string) => void) => void
+    join: (name: string, room: string, cb: (error: string) => void) => void;
+    sendMessage: (payload: MessagePayload) => void;
 }
   
 export interface InterServerEvents {
@@ -58,18 +59,14 @@ export const Chat = () => {
     const [name] = React.useState(queryParams.get('name') ?? '')
     const [room] = React.useState(queryParams.get('room') ?? '')
 
+    const [message, setMessage] = React.useState('')
     const [messages, setMessages] = React.useState<Message[]>([])
 
+    const [socket, setSocket] = React.useState<Socket<ServerToClientEvents, ClientToServerEvents>>(io(ENDPOINT))
+    
     React.useEffect(() => {
         const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(ENDPOINT);
-
-        socket.on('message', (payload: MessagePayload) => {
-            console.log('Message From The Server:' + 'User:', payload.user, '\nText:', payload.text)
-            setMessages(prevMessages => [...prevMessages, {
-                user: payload.user,
-                text: payload.text
-                }])
-        })
+        setSocket(socket)
 
         socket.emit('join', name, room, (errorMessage) => (alert(errorMessage)))
 
@@ -77,13 +74,42 @@ export const Chat = () => {
             socket.disconnect()
             socket.off()
             socket.send()
+            setMessages([])
         }
     }, [io, ENDPOINT, search])
+
+    React.useEffect(() => {
+        socket.on('message', (message: MessagePayload) => {
+            console.log('Message From The Server:' + 'User:', message.user, '\nText:', message.text)
+            setMessages(prevMessages => [...prevMessages, message])
+        })
+    }, [socket])
+
+    const onClickSend = () => {
+        console.log('sendMessage', message)
+        if (!message) {
+            return
+        }
+        socket.emit('sendMessage', {
+            user: name,
+            text: message
+        })
+        setMessage('')
+    }
     
     return (
         <div className={classes.chatWindowOuter}>
             <div className={classes.chatWindowInner}>
                 {messages.map(message => <Message user={message.user} text={message.text} key={Math.random().toString()} isOwner={isOwner(name, message.user) } />)}
+            </div>
+            <div className={classes.messageInputEnvelope}>
+                <textarea className={classes.messageTextArea} onChange={(e) => setMessage(e.target.value)} value={message} onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault()
+                        onClickSend()
+                    }
+                }} />
+                <button type='button' onClick={onClickSend} className={classes.messageSendButton}>{'Send'}</button>
             </div>
         </div>
     )

@@ -18,7 +18,7 @@ export const addUser = (socketId: string, name: string, room: string) => {
         room
     }
 
-    users.push()
+    users.push(user)
 
     return user
 }

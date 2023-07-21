@@ -2,8 +2,8 @@ import express from 'express'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
 import { router } from './router'
-import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from './utils/interfaces'
-import { addUser } from './users'
+import { ClientToServerEvents, InterServerEvents, MessagePayload, ServerToClientEvents, SocketData } from './utils/interfaces'
+import { addUser, getUser, removeUser } from './users'
 
 
 const PORT = Number(process.env.PORT) || 3000
@@ -46,6 +46,20 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         console.log('User has left!')
+        removeUser(socket.id)
+    })
+
+    socket.on('sendMessage', (payload: MessagePayload) => {
+        console.log('send from client', payload)
+        if (!payload.text) {
+            return
+        }
+        const user = getUser(socket.id)
+        if (!user) {
+            throw new Error('Missing user!!!')
+        }
+        // io sends it to everyone, socket.emit would not reach the author of the message - socket ignores the socket.id user
+        io.to(user.room).emit('message', payload)
     })
 })
 

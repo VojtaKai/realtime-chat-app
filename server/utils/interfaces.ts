@@ -4,6 +4,7 @@ export interface ServerToClientEvents {
   
 export interface ClientToServerEvents {
     join: (name: string, room: string, cb: (error: string) => void) => void
+    sendMessage: (payload: MessagePayload) => void;
 }
   
 export interface InterServerEvents {

@@ -3,13 +3,14 @@ import { createServer } from 'http'
 import { Server } from 'socket.io'
 import { router } from './router'
 import { ClientToServerEvents, InterServerEvents, MessagePayload, ServerToClientEvents, SocketData } from './utils/interfaces'
-import { addUser, getUser, removeUser } from './users'
+import { addUser, getUser, getUsersInRoom, removeUser } from './users'
 
 
 const PORT = Number(process.env.PORT) || 3000
 
 const app = express()
 const server = createServer(app)
+
 const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>(server, {
     cors: {
         origin: "*",
@@ -39,24 +40,41 @@ io.on('connection', (socket) => {
                 user: 'admin',
                 text: `User ${addedUser.name} has joined!`
             })
+
+            io.to(room).emit('roomUsers', { 
+                room: room,
+                users: getUsersInRoom(room)
+            })
         } catch (error: any) {
             return cb(error.message)
         }
     })
 
     socket.on('disconnect', () => {
-        console.log('User has left!')
+        const user = getUser(socket.id)
+        if (!user) {
+            return
+        }
+        socket.to(user.room).emit('message', {
+            user: 'admin',
+            text: `User ${user.name} left the chat.`
+        })
         removeUser(socket.id)
+
+        io.to(user.room).emit('roomUsers', { 
+            room: user.room,
+            users: getUsersInRoom(user.room)
+        })
+        
     })
 
     socket.on('sendMessage', (payload: MessagePayload) => {
-        console.log('send from client', payload)
         if (!payload.text) {
             return
         }
         const user = getUser(socket.id)
         if (!user) {
-            throw new Error('Missing user!!!')
+            return console.error('Missing user!!!')
         }
         // io sends it to everyone, socket.emit would not reach the author of the message - socket ignores the socket.id user
         io.to(user.room).emit('message', {

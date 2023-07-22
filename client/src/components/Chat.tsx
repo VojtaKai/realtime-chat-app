@@ -3,11 +3,13 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { io, Socket } from 'socket.io-client'
 import ScrollToTheBottom from 'react-scroll-to-bottom';
 import {GiExitDoor} from 'react-icons/gi'
+import {HiUsers} from 'react-icons/hi'
 
 import classes from './Chat.module.css'
 
 export interface ServerToClientEvents {
     message: (payload: MessagePayload) => void;
+    roomUsers: (payload: RoomUsersPayload) => void;
   }
   
 export interface ClientToServerEvents {
@@ -18,7 +20,7 @@ export interface ClientToServerEvents {
 export interface InterServerEvents {
     ping: () => void;
 }
-  
+
 export interface SocketData {
     name: string;
     age: number;
@@ -26,7 +28,7 @@ export interface SocketData {
 
 export interface MessagePayload {
     user: string;
-    text: string;
+    text: string
 }
 
 interface Message {
@@ -39,6 +41,13 @@ interface MessageProps {
     user: string
     text: string
 }
+
+export interface RoomUsersPayload {
+    room: string
+    users: string[]
+}
+
+
 
 const ENDPOINT = 'localhost:3000'
 
@@ -64,6 +73,10 @@ export const Chat = () => {
     const [message, setMessage] = React.useState('')
     const [messages, setMessages] = React.useState<Message[]>([])
 
+    const [showUsers, setShowUsers] = React.useState<boolean>(false)
+    
+    const [roomUsers, setRoomUsers] = React.useState<string[]>(['Vojta', 'Ivan'])
+
     const [socket, setSocket] = React.useState<Socket<ServerToClientEvents, ClientToServerEvents>>(io(ENDPOINT))
     
     React.useEffect(() => {
@@ -87,12 +100,19 @@ export const Chat = () => {
         })
     }, [socket])
 
+    React.useEffect(() => {
+        socket.on('roomUsers', (roomUsers: RoomUsersPayload) => {
+            setRoomUsers(roomUsers.users)
+        })
+    }, [socket])
+
     const onClickSend = (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent<HTMLTextAreaElement>) => {
         console.log('sendMessage', message)
         e.preventDefault()
         if (!message) {
             return
         }
+
         socket.emit('sendMessage', {
             user: name,
             text: message
@@ -104,15 +124,24 @@ export const Chat = () => {
         <div className={classes.chatWindowOuter}>
             <div className={classes.infoBar} >
                 <h3>{`Room: ${room}`}</h3>
-                <GiExitDoor size={48} style={{cursor: "pointer"}} color={'white'} onClick={() => navigate('/')} />
+                <div>
+                    <HiUsers size={48} style={{cursor: "pointer"}} color={'white'} onClick={() => setShowUsers(prevState => !prevState)} />
+                    <GiExitDoor size={48} style={{cursor: "pointer"}} color={'white'} onClick={() => navigate('/')} />
+                </div>
             </div>
-            <ScrollToTheBottom className={classes.chatWindowInner} mode='bottom' scrollViewClassName={classes.chatWindowInnerChildren} >
+            <ScrollToTheBottom className={classes.chatMessageSection} mode='bottom' scrollViewClassName={classes.chatMessageSectionChildren} >
                 {messages.map(message => <Message user={message.user} text={message.text} key={Math.random().toString()} isOwner={isMessageOwner(name, message.user) } />)}
             </ScrollToTheBottom>
             <div className={classes.messageInputEnvelope}>
                 <textarea className={classes.messageTextArea} onChange={(e) => setMessage(e.target.value)} placeholder='Type a message' value={message} onKeyDown={(e) => e.key === 'Enter' && onClickSend(e)} />
                 <button type='button' onClick={onClickSend} className={classes.messageSendButton}>{'Send'}</button>
             </div>
+            { showUsers && 
+                <dialog style={{border: '10px solid white'}} open={showUsers}>
+                    {roomUsers.map(user => <h6>{user}</h6>)}
+                    <button onClick={() => setShowUsers(false)}>Close</button>
+                </dialog>
+            }
         </div>
     )
 }

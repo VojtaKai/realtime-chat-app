@@ -1,5 +1,6 @@
 export interface ServerToClientEvents {
     message: (payload: MessagePayload) => void;
+    roomUsers: (payload: RoomUsersPayload) => void;
   }
   
 export interface ClientToServerEvents {
@@ -25,4 +26,9 @@ export interface User {
 export interface MessagePayload {
     user: string;
     text: string
+}
+
+export interface RoomUsersPayload {
+    room: string
+    users: string[]
 }

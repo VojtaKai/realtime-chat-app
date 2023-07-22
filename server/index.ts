@@ -68,7 +68,7 @@ io.on('connection', (socket) => {
         
     })
 
-    socket.on('sendMessage', (payload: MessagePayload) => {
+    socket.on('sendMessage', (payload, callback) => {
         if (!payload.text) {
             return
         }
@@ -81,6 +81,8 @@ io.on('connection', (socket) => {
             user: user.name, // back to lowercase
             text: payload.text
         })
+
+        callback()
     })
 })
 

@@ -14,7 +14,7 @@ export interface ServerToClientEvents {
   
 export interface ClientToServerEvents {
     join: (name: string, room: string, cb: (error: string) => void) => void;
-    sendMessage: (payload: MessagePayload) => void;
+    sendMessage: (payload: MessagePayload, cb: () => void) => void;
 }
   
 export interface InterServerEvents {
@@ -54,9 +54,12 @@ const ENDPOINT = 'localhost:3000'
 
 const Message = (props: MessageProps) => {
     return (
-        <div className={ props.isOwner ? classes.messageEnvelopeRight : classes.messageEnvelopeLeft}>
-            <h1 className={classes.message}>{props.text}</h1>
-            <h1 className={classes.message}>{props.user}</h1>
+        <div className={classes.messageEnvelopeOuter}>
+            {props.isOwner && <h1 className={classes.message}>{props.user}</h1>}
+            <div className={ props.isOwner ? classes.messageEnvelopeRight : classes.messageEnvelopeLeft}>
+                <h1 className={classes.message}>{props.text}</h1>
+            </div>
+            {!props.isOwner && <h1 className={classes.message}>{props.user}</h1>}
         </div>
     )
 }
@@ -116,8 +119,8 @@ export const Chat = () => {
         socket.emit('sendMessage', {
             user: name,
             text: message
-        })
-        setMessage('')
+        }, () => setMessage(''))
+        
     }
     
     return (
@@ -125,8 +128,8 @@ export const Chat = () => {
             <div className={classes.infoBar} >
                 <h3>{`Room: ${room}`}</h3>
                 <div>
-                    <HiUsers size={48} style={{cursor: "pointer"}} color={'white'} onClick={() => setShowUsers(prevState => !prevState)} />
-                    <GiExitDoor size={48} style={{cursor: "pointer"}} color={'white'} onClick={() => navigate('/')} />
+                    <HiUsers size={48} style={{cursor: "pointer"}} onClick={() => setShowUsers(prevState => !prevState)} />
+                    <GiExitDoor size={48} style={{cursor: "pointer"}} onClick={() => navigate('/')} />
                 </div>
             </div>
             <ScrollToTheBottom className={classes.chatMessageSection} mode='bottom' scrollViewClassName={classes.chatMessageSectionChildren} >
@@ -137,7 +140,7 @@ export const Chat = () => {
                 <button type='button' onClick={onClickSend} className={classes.messageSendButton}>{'Send'}</button>
             </div>
             { showUsers && 
-                <dialog style={{border: '10px solid white'}} open={showUsers}>
+                <dialog style={{border: '10px solid black'}} open={showUsers}>
                     {roomUsers.map(user => <h6>{user}</h6>)}
                     <button onClick={() => setShowUsers(false)}>Close</button>
                 </dialog>

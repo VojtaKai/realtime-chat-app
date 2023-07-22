@@ -1,14 +1,11 @@
-.white {
-    color: white
+.black {
+    color: black
 }
 
 .chatWindowOuter {
     height: 100%;
     width: 100%;
-    border: 4px solid;
-    border-color: rgb(11, 11, 253);
-    border-radius: 15px;
-    padding: 5px;
+    background-color: white;
     display: flex;
     flex-direction: column;
 }
@@ -18,8 +15,8 @@
     flex-direction: row;
     justify-content: space-between;
     padding: 0px 10px 10px 10px;
-    border-bottom: 4px solid blue;
-    color: white
+    color: black;
+    background-color: #274eff;
 }
 
 .chatMessageSection {
@@ -36,6 +33,7 @@
 
 .messageEnvelopeRight {
     border: 2px solid rgb(11, 11, 253);
+    background-color: #2baaff;
     width: 80%;
     margin: 10px;
     padding: 0px 10px;
@@ -48,6 +46,7 @@
 
 .messageEnvelopeLeft {
     border: 2px solid rgb(11, 11, 253);
+    background-color: #2baaff;;
     width: 80%;
     margin: 10px;
     padding: 0px 10px;
@@ -60,36 +59,40 @@
 }
 
 .message {
-    color: white;
+    color: black;
     font-size: small;
 }
 
 
 @media only screen and (min-width: 600px) {
     .chatWindowOuter {
+        background-color: white;
         height: 80vh;
         width: 60vw;
-        border: 4px solid;
-        border-color: rgb(11, 11, 253);
-        border-radius: 15px;
+    }
+
+    .messageEnvelopeOuter {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
     }
 
     .messageEnvelopeRight {
         border: 2px solid rgb(11, 11, 253);
-        width: 60%;
+        width: auto;
         margin: 10px;
         padding: 0px 10px;
         position: relative;
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        justify-content: flex-end;
         border-radius: 10px;
         align-self: end;
     }
 
     .messageEnvelopeLeft {
         border: 2px solid rgb(11, 11, 253);
-        width: 60%;
+        width: auto;
         margin: 10px;
         padding: 0px 10px;
         position: relative;
@@ -112,7 +115,6 @@
         width: 90%;
         max-height: 36px;
         resize: none;
-        border-radius: 5px;
     }
 
     .messageSendButton {

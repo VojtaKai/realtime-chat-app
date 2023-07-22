@@ -59,7 +59,10 @@ io.on('connection', (socket) => {
             throw new Error('Missing user!!!')
         }
         // io sends it to everyone, socket.emit would not reach the author of the message - socket ignores the socket.id user
-        io.to(user.room).emit('message', payload)
+        io.to(user.room).emit('message', {
+            user: user.name, // back to lowercase
+            text: payload.text
+        })
     })
 })
 

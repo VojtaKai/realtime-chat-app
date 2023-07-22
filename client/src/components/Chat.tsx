@@ -1,8 +1,10 @@
 import * as React from 'react'
-import { useLocation } from 'react-router-dom'
-import classes from './Chat.module.css'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { io, Socket } from 'socket.io-client'
 import ScrollToTheBottom from 'react-scroll-to-bottom';
+import {GiExitDoor} from 'react-icons/gi'
+
+import classes from './Chat.module.css'
 
 export interface ServerToClientEvents {
     message: (payload: MessagePayload) => void;
@@ -50,13 +52,12 @@ const Message = (props: MessageProps) => {
     )
 }
 
-const isOwner = (name: string, messageAuthor: string) => {
-    return name.toLowerCase() === messageAuthor
-}
+const isMessageOwner = (name: string, messageAuthor: string) => name.replace(" ", "").trim().toLowerCase() === messageAuthor
 
 export const Chat = () => {
     const { search } = useLocation();
     const queryParams = new URLSearchParams(search)
+    const navigate = useNavigate()
     const [name] = React.useState(queryParams.get('name') ?? '')
     const [room] = React.useState(queryParams.get('room') ?? '')
 
@@ -101,8 +102,12 @@ export const Chat = () => {
     
     return (
         <div className={classes.chatWindowOuter}>
+            <div className={classes.infoBar} >
+                <h3>{`Room: ${room}`}</h3>
+                <GiExitDoor size={48} style={{cursor: "pointer"}} color={'white'} onClick={() => navigate('/')} />
+            </div>
             <ScrollToTheBottom className={classes.chatWindowInner} mode='bottom' scrollViewClassName={classes.chatWindowInnerChildren} >
-                {messages.map(message => <Message user={message.user} text={message.text} key={Math.random().toString()} isOwner={isOwner(name, message.user) } />)}
+                {messages.map(message => <Message user={message.user} text={message.text} key={Math.random().toString()} isOwner={isMessageOwner(name, message.user) } />)}
             </ScrollToTheBottom>
             <div className={classes.messageInputEnvelope}>
                 <textarea className={classes.messageTextArea} onChange={(e) => setMessage(e.target.value)} placeholder='Type a message' value={message} onKeyDown={(e) => e.key === 'Enter' && onClickSend(e)} />

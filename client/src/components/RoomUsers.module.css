@@ -1,0 +1,34 @@
+.containerOuter {
+    height: 80vh;
+    width: 20vw;
+    border-left: 2px solid black;
+}
+
+.container {
+    height: calc(100% - 60px);
+    width: 20vw;
+    display: flex;
+    justify-content: end;
+}
+
+.button {
+    width: 65px;
+    height: 40px;
+    border-radius: 8px;
+    margin: 10px 0px;
+}
+
+.button:hover {
+    font-weight: bold;
+}
+
+.userTable {
+    width: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.users {
+    width: 100%;
+    padding-right: 30px;
+}

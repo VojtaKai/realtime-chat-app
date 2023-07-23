@@ -14,13 +14,15 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    flex-grow: 0;
     padding: 0px 10px 10px 10px;
     color: black;
     background-color: #274eff;
 }
 
 .chatMessageSection {
-    height: calc(90% - 62px);
+    height: calc(100% - 70px - 36px);
+    max-height: calc(100% - 70px - 36px);
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -31,31 +33,13 @@
     flex-direction: column;
 }
 
-.messageEnvelopeRight {
+.messageEnvelope {
     border: 2px solid rgb(11, 11, 253);
     background-color: #2baaff;
     width: 80%;
     margin: 10px;
     padding: 0px 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
     border-radius: 10px;
-    align-self: end;
-}
-
-.messageEnvelopeLeft {
-    border: 2px solid rgb(11, 11, 253);
-    background-color: #2baaff;;
-    width: 80%;
-    margin: 10px;
-    padding: 0px 10px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    border-radius: 10px;
-    align-self: start;
 }
 
 .message {
@@ -67,47 +51,48 @@
 @media only screen and (min-width: 600px) {
     .chatWindowOuter {
         background-color: white;
+        flex-direction: row;
         height: 80vh;
         width: 60vw;
     }
 
-    .messageEnvelopeOuter {
+    .chatWindowInnerLarge {
+        height: 80vh;
+        width: 60vw;
+    }
+
+    .chatWindowInnerSmall {
+        height: 80vh;
+        width: 40vw;
+    }
+
+    .messageEnvelopeOuterRight {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .messageEnvelopeOuterLeft {
         display: flex;
         flex-direction: row;
         align-items: center;
     }
 
-    .messageEnvelopeRight {
+    .messageEnvelope {
         border: 2px solid rgb(11, 11, 253);
         width: auto;
+        max-width: 60%;
         margin: 10px;
         padding: 0px 10px;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
         border-radius: 10px;
-        align-self: end;
-    }
 
-    .messageEnvelopeLeft {
-        border: 2px solid rgb(11, 11, 253);
-        width: auto;
-        margin: 10px;
-        padding: 0px 10px;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        border-radius: 10px;
-        align-self: start;
     }
 
     .messageInputEnvelope {
-        height: 10%;
         display: flex;
         flex-direction: row;
-        margin-top: 20px;
+        flex-grow: 0;
         align-items: flex-end;
     }
 

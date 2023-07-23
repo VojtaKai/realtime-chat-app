@@ -6,6 +6,7 @@ import {GiExitDoor} from 'react-icons/gi'
 import {HiUsers} from 'react-icons/hi'
 
 import classes from './Chat.module.css'
+import { RoomUsers } from './RoomUsers';
 
 export interface ServerToClientEvents {
     message: (payload: MessagePayload) => void;
@@ -54,9 +55,9 @@ const ENDPOINT = 'localhost:3000'
 
 const Message = (props: MessageProps) => {
     return (
-        <div className={classes.messageEnvelopeOuter}>
+        <div className={ props.isOwner ? classes.messageEnvelopeOuterRight : classes.messageEnvelopeOuterLeft}>
             {props.isOwner && <h1 className={classes.message}>{props.user}</h1>}
-            <div className={ props.isOwner ? classes.messageEnvelopeRight : classes.messageEnvelopeLeft}>
+            <div className={classes.messageEnvelope}>
                 <h1 className={classes.message}>{props.text}</h1>
             </div>
             {!props.isOwner && <h1 className={classes.message}>{props.user}</h1>}
@@ -125,26 +126,23 @@ export const Chat = () => {
     
     return (
         <div className={classes.chatWindowOuter}>
-            <div className={classes.infoBar} >
-                <h3>{`Room: ${room}`}</h3>
-                <div>
-                    <HiUsers size={48} style={{cursor: "pointer"}} onClick={() => setShowUsers(prevState => !prevState)} />
-                    <GiExitDoor size={48} style={{cursor: "pointer"}} onClick={() => navigate('/')} />
+            <div className={showUsers ? classes.chatWindowInnerSmall : classes.chatWindowInnerLarge}>
+                <div className={classes.infoBar} >
+                    <h3>{`Room: ${room}`}</h3>
+                    <div>
+                        <HiUsers size={48} style={{cursor: "pointer", marginRight: '40px'}} onClick={() => setShowUsers(prevState => !prevState)} />
+                        <GiExitDoor size={48} style={{cursor: "pointer"}} onClick={() => navigate('/')} />
+                    </div>
+                </div>
+                <ScrollToTheBottom className={classes.chatMessageSection} mode='bottom' scrollViewClassName={classes.chatMessageSectionChildren} >
+                    {messages.map(message => <Message user={message.user} text={message.text} key={Math.random().toString()} isOwner={isMessageOwner(name, message.user) } />)}
+                </ScrollToTheBottom>
+                <div className={classes.messageInputEnvelope}>
+                    <textarea className={classes.messageTextArea} onChange={(e) => setMessage(e.target.value)} placeholder='Type a message' value={message} onKeyDown={(e) => e.key === 'Enter' && onClickSend(e)} />
+                    <button type='button' onClick={onClickSend} className={classes.messageSendButton}>{'Send'}</button>
                 </div>
             </div>
-            <ScrollToTheBottom className={classes.chatMessageSection} mode='bottom' scrollViewClassName={classes.chatMessageSectionChildren} >
-                {messages.map(message => <Message user={message.user} text={message.text} key={Math.random().toString()} isOwner={isMessageOwner(name, message.user) } />)}
-            </ScrollToTheBottom>
-            <div className={classes.messageInputEnvelope}>
-                <textarea className={classes.messageTextArea} onChange={(e) => setMessage(e.target.value)} placeholder='Type a message' value={message} onKeyDown={(e) => e.key === 'Enter' && onClickSend(e)} />
-                <button type='button' onClick={onClickSend} className={classes.messageSendButton}>{'Send'}</button>
-            </div>
-            { showUsers && 
-                <dialog style={{border: '10px solid black'}} open={showUsers}>
-                    {roomUsers.map(user => <h6>{user}</h6>)}
-                    <button onClick={() => setShowUsers(false)}>Close</button>
-                </dialog>
-            }
+            { showUsers && <RoomUsers users={roomUsers} setShowUsers={setShowUsers} /> }
         </div>
     )
 }

@@ -26,6 +26,7 @@ export const Chat = () => {
     const { search } = useLocation();
     const queryParams = new URLSearchParams(search)
     const navigate = useNavigate()
+
     const [name] = React.useState(queryParams.get('name') ?? '')
     const [room] = React.useState(queryParams.get('room') ?? '')
 

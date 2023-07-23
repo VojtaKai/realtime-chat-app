@@ -33,29 +33,6 @@
     flex-direction: column;
 }
 
-.messageEnvelope {
-    border: 2px solid rgb(11, 11, 253);
-    background-color: #2baaff;
-    width: 80%;
-    margin: 10px;
-    padding: 0px 10px;
-    border-radius: 10px;
-}
-
-.messageEnvelopePrivate {
-    border: 2px solid rgb(2, 151, 27);
-    background-color: #2fd61f;
-    width: 80%;
-    margin: 10px;
-    padding: 0px 10px;
-    border-radius: 10px;
-}
-
-.message {
-    color: black;
-    font-size: small;
-}
-
 
 @media only screen and (min-width: 600px) {
     .chatWindowOuter {
@@ -73,37 +50,6 @@
     .chatWindowInnerSmall {
         height: 80vh;
         width: 40vw;
-    }
-
-    .messageEnvelopeOuterRight {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-end;
-    }
-
-    .messageEnvelopeOuterLeft {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-    }
-
-    .messageEnvelope {
-        border: 2px solid rgb(11, 11, 253);
-        width: auto;
-        max-width: 60%;
-        margin: 10px;
-        padding: 0px 10px;
-        border-radius: 10px;
-    }
-
-    .messageEnvelopePrivate {
-        border: 2px solid rgb(2, 151, 27);
-        width: auto;
-        max-width: 60%;
-        margin: 10px;
-        padding: 0px 10px;
-        border-radius: 10px;
     }
 
     .messageInputEnvelope {

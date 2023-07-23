@@ -2,7 +2,7 @@ import express from 'express'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
 import { router } from './router'
-import { ClientToServerEvents, InterServerEvents, MessagePayload, ServerToClientEvents, SocketData } from './utils/interfaces'
+import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from './utils/interfaces'
 import { addUser, getUser, getUserByName, getUsersInRoom, removeUser } from './users'
 
 

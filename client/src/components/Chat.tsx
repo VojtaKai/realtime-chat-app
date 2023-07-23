@@ -8,78 +8,17 @@ import {AiOutlineStop} from 'react-icons/ai'
 
 import classes from './Chat.module.css'
 import { RoomUsers } from './RoomUsers';
-
-export interface ServerToClientEvents {
-    message: (payload: MessagePayload) => void;
-    privateMessage: (payload: PrivateMessagePayload) => void;
-    roomUsers: (payload: RoomUsersPayload) => void;
-  }
-  
-export interface ClientToServerEvents {
-    join: (name: string, room: string, cb: (error: string) => void) => void;
-    sendMessage: (payload: MessagePayload, cb: () => void) => void;
-    sendPrivateMessage: (payload: PrivateMessagePayload, cb: () => void) => void;
-}
-  
-export interface InterServerEvents {
-    ping: () => void;
-}
-
-export interface SocketData {
-    name: string;
-    age: number;
-}
-
-export interface MessagePayload {
-    user: string;
-    text: string;
-}
-
-export interface PrivateMessagePayload extends MessagePayload {
-    targetUser: string
-    isPrivate: boolean
-}
-
-type Message = MessagePayload & Partial<PrivateMessagePayload>
-
-interface MessageProps {
-    message: Message
-    isOwner: boolean
-    setIsPrivateMessage: React.Dispatch<React.SetStateAction<boolean>>
-    setPrivateMessageUser: React.Dispatch<React.SetStateAction<string>>
-}
-
-export interface RoomUsersPayload {
-    room: string
-    users: string[]
-}
-
-
+import { 
+    ClientToServerEvents, 
+    IMessage, 
+    MessagePayload, 
+    PrivateMessagePayload, 
+    RoomUsersPayload, 
+    ServerToClientEvents 
+} from '../utils/interfaces';
+import { Message } from './Message';
 
 const ENDPOINT = 'localhost:3000'
-
-
-const Message = (props: MessageProps) => {
-    const {message, setIsPrivateMessage, setPrivateMessageUser} = props
-    const {text, user, targetUser, isPrivate} = message
-    return (
-        <div className={ props.isOwner ? classes.messageEnvelopeOuterRight : classes.messageEnvelopeOuterLeft}>
-            {props.isOwner && !isPrivate && <h1 className={classes.message}>{'You'}</h1>}
-            {props.isOwner && isPrivate && <h1 className={classes.message}>{`Whispering to ${targetUser}`}</h1>}
-            <div className={message.isPrivate ? classes.messageEnvelopePrivate : classes.messageEnvelope} onDoubleClick={() => {
-                    if (props.isOwner || user === 'admin') {
-                        return
-                    }
-                    setIsPrivateMessage(true)
-                    setPrivateMessageUser(user)
-                }}>
-                <h1 className={classes.message}>{text}</h1>
-            </div>
-            {!props.isOwner && !isPrivate && <h1 className={classes.message}>{user}</h1>}
-            {!props.isOwner && isPrivate && <h1 className={classes.message}>{`${user} whispers you`}</h1>}
-        </div>
-    )
-}
 
 const isMessageOwner = (name: string, messageAuthor: string) => name.replace(" ", "").trim().toLowerCase() === messageAuthor
 
@@ -91,11 +30,11 @@ export const Chat = () => {
     const [room] = React.useState(queryParams.get('room') ?? '')
 
     const [message, setMessage] = React.useState('')
-    const [messages, setMessages] = React.useState<Message[]>([])
+    const [messages, setMessages] = React.useState<IMessage[]>([])
 
     const [showUsers, setShowUsers] = React.useState<boolean>(false)
     
-    const [roomUsers, setRoomUsers] = React.useState<string[]>(['Vojta', 'Ivan'])
+    const [roomUsers, setRoomUsers] = React.useState<string[]>([])
 
     const [isPrivateMessage, setIsPrivateMessage] = React.useState<boolean>(false)
     const [privateMessageUser, setPrivateMessageUser] = React.useState<string>('')
@@ -180,7 +119,7 @@ export const Chat = () => {
                 </div>
                 <ScrollToTheBottom className={classes.chatMessageSection} mode='bottom' scrollViewClassName={classes.chatMessageSectionChildren} >
                     {messages.map(message => 
-                        <Message 
+                        <Message
                             message={message}
                             key={Math.random().toString()} 
                             isOwner={isMessageOwner(name, message.user)}

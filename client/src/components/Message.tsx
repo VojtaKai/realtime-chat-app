@@ -15,7 +15,7 @@ export const Message = (props: MessageProps) => {
     const {text, user, targetUser, isPrivate} = message
 
     const onDoubleClickHandler = () => {
-        if (props.isOwner || user === 'admin') {
+        if (isOwner || user === 'admin') {
             return
         }
         setIsPrivateMessage(true)

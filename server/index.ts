@@ -91,11 +91,16 @@ io.on('connection', (socket) => {
             return
         }
 
+
         const user = getUserByName(payload.user)
         const targetUser = getUserByName(payload.targetUser)
 
         if (!targetUser || !user) {
             return console.error('Missing user!!!')
+        }
+
+        if (user.name === targetUser.name) {
+            return
         }
 
         const privateMessagePayload = {

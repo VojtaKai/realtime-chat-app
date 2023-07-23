@@ -20,7 +20,7 @@ import { Message } from './Message';
 
 const ENDPOINT = 'localhost:3000'
 
-const isMessageOwner = (name: string, messageAuthor: string) => name.replace(" ", "").trim().toLowerCase() === messageAuthor
+const isMessageOwner = (name: string, messageAuthor: string) => name.replace(" ", "").trim().toLowerCase() === messageAuthor.replace(" ", "").trim().toLowerCase()
 
 export const Chat = () => {
     const { search } = useLocation();
@@ -40,6 +40,8 @@ export const Chat = () => {
     const [privateMessageUser, setPrivateMessageUser] = React.useState<string>('')
 
     const [socket, setSocket] = React.useState<Socket<ServerToClientEvents, ClientToServerEvents>>(io(ENDPOINT))
+
+    const inputRef = React.useRef<HTMLTextAreaElement | null>(null)
     
     React.useEffect(() => {
         const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(ENDPOINT);
@@ -75,6 +77,10 @@ export const Chat = () => {
         })
     }, [socket])
 
+    React.useEffect(() => {
+        inputRef.current?.focus()
+    }, [privateMessageUser, inputRef, inputRef.current])
+
     const onClickSend = (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent<HTMLTextAreaElement>) => {
         console.log('sendMessage', message)
         e.preventDefault()
@@ -107,9 +113,13 @@ export const Chat = () => {
     }
 
     const privateMessageHandler = (user: string) => {
+        if (isMessageOwner(name, user)) {
+            return
+        }
         setIsPrivateMessage(true)
         setPrivateMessageUser(user)
         setShowUsers(false)
+        inputRef.current?.focus()
     }
     
     return (
@@ -139,12 +149,12 @@ export const Chat = () => {
                             setIsPrivateMessage(false)
                             setPrivateMessageUser('')
                         }} />
-                        <textarea className={classes.messageTextArea} onChange={(e) => setMessage(e.target.value)} placeholder='Type a message' value={message} onKeyDown={(e) => e.key === 'Enter' && onClickSendPrivate(e)} />
+                        <textarea ref={inputRef} className={classes.messageTextArea} onChange={(e) => setMessage(e.target.value)} placeholder='Type a message' value={message} onKeyDown={(e) => e.key === 'Enter' && onClickSendPrivate(e)} />
                         <button type='button' onClick={onClickSendPrivate} className={classes.messageSendButton}>{'Send'}</button>
                     </div>
                     : 
                     <div className={classes.messageInputEnvelope}>
-                        <textarea className={classes.messageTextArea} onChange={(e) => setMessage(e.target.value)} placeholder='Type a message' value={message} onKeyDown={(e) => e.key === 'Enter' && onClickSend(e)} />
+                        <textarea ref={inputRef} className={classes.messageTextArea} onChange={(e) => setMessage(e.target.value)} placeholder='Type a message' value={message} onKeyDown={(e) => e.key === 'Enter' && onClickSend(e)} />
                         <button type='button' onClick={onClickSend} className={classes.messageSendButton}>{'Send'}</button>
                     </div>
                 }

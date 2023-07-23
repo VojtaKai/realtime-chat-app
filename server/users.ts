@@ -35,5 +35,4 @@ export const getUser = (socketId: string) => users.find(user => user.socketId ==
 
 export const getUserByName = (name: string) => users.find(user => user.name === name.replace(" ", "").trim().toLowerCase())
 
-
 export const getUsersInRoom = (room: string) => users.filter(user => user.room === room).map(user => user.name)

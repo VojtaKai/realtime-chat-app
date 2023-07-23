@@ -1,11 +1,13 @@
 export interface ServerToClientEvents {
     message: (payload: MessagePayload) => void;
+    privateMessage: (payload: PrivateMessagePayload) => void;
     roomUsers: (payload: RoomUsersPayload) => void;
   }
   
 export interface ClientToServerEvents {
     join: (name: string, room: string, cb: (error: string) => void) => void
     sendMessage: (payload: MessagePayload, cb: () => void) => void;
+    sendPrivateMessage: (payload: PrivateMessagePayload, cb: () => void) => void;
 }
   
 export interface InterServerEvents {
@@ -25,7 +27,12 @@ export interface User {
 
 export interface MessagePayload {
     user: string;
-    text: string
+    text: string;
+}
+
+export interface PrivateMessagePayload extends MessagePayload {
+    isPrivate: boolean;
+    targetUser: string
 }
 
 export interface RoomUsersPayload {

@@ -3,7 +3,7 @@ import { createServer } from 'http'
 import { Server } from 'socket.io'
 import { router } from './router'
 import { ClientToServerEvents, InterServerEvents, MessagePayload, ServerToClientEvents, SocketData } from './utils/interfaces'
-import { addUser, getUser, getUsersInRoom, removeUser } from './users'
+import { addUser, getUser, getUserByName, getUsersInRoom, removeUser } from './users'
 
 
 const PORT = Number(process.env.PORT) || 3000
@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
                 text: `Welcome to the room ${addedUser.room}, ${addedUser.name}!`
             })
 
-            // socket.broadcast - to everyone except the socketId that joined, to ALL the rooms
+            // socket.broadcast - to everyone except the socketId that joined, to ALL the rooms // tested?
             // socket.broadcast.to(room) === socket.to(room) - to everyone in the room except the socketId
             socket.to(addedUser.room).emit('message', {
                 user: 'admin',
@@ -81,6 +81,33 @@ io.on('connection', (socket) => {
             user: user.name, // back to lowercase
             text: payload.text
         })
+
+        callback()
+    })
+
+    socket.on('sendPrivateMessage', (payload, callback) => {
+        console.log('sendPrivateMessage', payload)
+        if (!payload.text) {
+            return
+        }
+
+        const user = getUserByName(payload.user)
+        const targetUser = getUserByName(payload.targetUser)
+
+        if (!targetUser || !user) {
+            return console.error('Missing user!!!')
+        }
+
+        const privateMessagePayload = {
+            user: user.name,
+            text: payload.text,
+            targetUser: targetUser.name,
+            isPrivate: true
+        }
+
+        socket.to(targetUser.socketId).emit('privateMessage', privateMessagePayload)
+        io.to(socket.id).emit('privateMessage', privateMessagePayload)
+        // io.to(room).to(socket.id).emit(...) - sends to both - to the room and to the specified socketId.
 
         callback()
     })

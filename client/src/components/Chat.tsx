@@ -4,18 +4,21 @@ import { io, Socket } from 'socket.io-client'
 import ScrollToTheBottom from 'react-scroll-to-bottom';
 import {GiExitDoor} from 'react-icons/gi'
 import {HiUsers} from 'react-icons/hi'
+import {AiOutlineStop} from 'react-icons/ai'
 
 import classes from './Chat.module.css'
 import { RoomUsers } from './RoomUsers';
 
 export interface ServerToClientEvents {
     message: (payload: MessagePayload) => void;
+    privateMessage: (payload: PrivateMessagePayload) => void;
     roomUsers: (payload: RoomUsersPayload) => void;
   }
   
 export interface ClientToServerEvents {
     join: (name: string, room: string, cb: (error: string) => void) => void;
     sendMessage: (payload: MessagePayload, cb: () => void) => void;
+    sendPrivateMessage: (payload: PrivateMessagePayload, cb: () => void) => void;
 }
   
 export interface InterServerEvents {
@@ -29,18 +32,21 @@ export interface SocketData {
 
 export interface MessagePayload {
     user: string;
-    text: string
+    text: string;
 }
 
-interface Message {
-    user: string
-    text: string
+export interface PrivateMessagePayload extends MessagePayload {
+    targetUser: string
+    isPrivate: boolean
 }
+
+type Message = MessagePayload & Partial<PrivateMessagePayload>
 
 interface MessageProps {
+    message: Message
     isOwner: boolean
-    user: string
-    text: string
+    setIsPrivateMessage: React.Dispatch<React.SetStateAction<boolean>>
+    setPrivateMessageUser: React.Dispatch<React.SetStateAction<string>>
 }
 
 export interface RoomUsersPayload {
@@ -54,13 +60,23 @@ const ENDPOINT = 'localhost:3000'
 
 
 const Message = (props: MessageProps) => {
+    const {message, setIsPrivateMessage, setPrivateMessageUser} = props
+    const {text, user, targetUser, isPrivate} = message
     return (
         <div className={ props.isOwner ? classes.messageEnvelopeOuterRight : classes.messageEnvelopeOuterLeft}>
-            {props.isOwner && <h1 className={classes.message}>{props.user}</h1>}
-            <div className={classes.messageEnvelope}>
-                <h1 className={classes.message}>{props.text}</h1>
+            {props.isOwner && !isPrivate && <h1 className={classes.message}>{'You'}</h1>}
+            {props.isOwner && isPrivate && <h1 className={classes.message}>{`Whispering to ${targetUser}`}</h1>}
+            <div className={message.isPrivate ? classes.messageEnvelopePrivate : classes.messageEnvelope} onDoubleClick={() => {
+                    if (props.isOwner || user === 'admin') {
+                        return
+                    }
+                    setIsPrivateMessage(true)
+                    setPrivateMessageUser(user)
+                }}>
+                <h1 className={classes.message}>{text}</h1>
             </div>
-            {!props.isOwner && <h1 className={classes.message}>{props.user}</h1>}
+            {!props.isOwner && !isPrivate && <h1 className={classes.message}>{user}</h1>}
+            {!props.isOwner && isPrivate && <h1 className={classes.message}>{`${user} whispers you`}</h1>}
         </div>
     )
 }
@@ -80,6 +96,9 @@ export const Chat = () => {
     const [showUsers, setShowUsers] = React.useState<boolean>(false)
     
     const [roomUsers, setRoomUsers] = React.useState<string[]>(['Vojta', 'Ivan'])
+
+    const [isPrivateMessage, setIsPrivateMessage] = React.useState<boolean>(false)
+    const [privateMessageUser, setPrivateMessageUser] = React.useState<string>('')
 
     const [socket, setSocket] = React.useState<Socket<ServerToClientEvents, ClientToServerEvents>>(io(ENDPOINT))
     
@@ -105,6 +124,13 @@ export const Chat = () => {
     }, [socket])
 
     React.useEffect(() => {
+        socket.on('privateMessage', (message: PrivateMessagePayload) => {
+            console.log('Message From The Server:' + 'User:', message.user, '\nText:', message.text)
+            setMessages(prevMessages => [...prevMessages, message])
+        })
+    }, [socket])
+
+    React.useEffect(() => {
         socket.on('roomUsers', (roomUsers: RoomUsersPayload) => {
             setRoomUsers(roomUsers.users)
         })
@@ -123,6 +149,24 @@ export const Chat = () => {
         }, () => setMessage(''))
         
     }
+
+    const onClickSendPrivate = (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent<HTMLTextAreaElement>) => {
+        console.log('sendPrivateMessage', message)
+        e.preventDefault()
+        if (!message) {
+            return
+        }
+
+        socket.emit('sendPrivateMessage', {
+            user: name,
+            targetUser: privateMessageUser,
+            text: message,
+            isPrivate: true
+        }, () => {
+            setMessage('')
+        })
+        
+    }
     
     return (
         <div className={classes.chatWindowOuter}>
@@ -135,12 +179,31 @@ export const Chat = () => {
                     </div>
                 </div>
                 <ScrollToTheBottom className={classes.chatMessageSection} mode='bottom' scrollViewClassName={classes.chatMessageSectionChildren} >
-                    {messages.map(message => <Message user={message.user} text={message.text} key={Math.random().toString()} isOwner={isMessageOwner(name, message.user) } />)}
+                    {messages.map(message => 
+                        <Message 
+                            message={message}
+                            key={Math.random().toString()} 
+                            isOwner={isMessageOwner(name, message.user)}
+                            setIsPrivateMessage={setIsPrivateMessage}
+                            setPrivateMessageUser={setPrivateMessageUser}
+                        />)}
                 </ScrollToTheBottom>
-                <div className={classes.messageInputEnvelope}>
-                    <textarea className={classes.messageTextArea} onChange={(e) => setMessage(e.target.value)} placeholder='Type a message' value={message} onKeyDown={(e) => e.key === 'Enter' && onClickSend(e)} />
-                    <button type='button' onClick={onClickSend} className={classes.messageSendButton}>{'Send'}</button>
-                </div>
+                { isPrivateMessage ? 
+                     <div className={classes.messageInputEnvelope}>
+                        <h6 style={{height: '36px', margin: '0px'}}>{`Private message to ${privateMessageUser}`}</h6>
+                        <AiOutlineStop size={16} style={{alignSelf: 'center', cursor: 'pointer'}} onClick={() => {
+                            setIsPrivateMessage(false)
+                            setPrivateMessageUser('')
+                        }} />
+                        <textarea className={classes.messageTextArea} onChange={(e) => setMessage(e.target.value)} placeholder='Type a message' value={message} onKeyDown={(e) => e.key === 'Enter' && onClickSendPrivate(e)} />
+                        <button type='button' onClick={onClickSendPrivate} className={classes.messageSendButton}>{'Send'}</button>
+                    </div>
+                    : 
+                    <div className={classes.messageInputEnvelope}>
+                        <textarea className={classes.messageTextArea} onChange={(e) => setMessage(e.target.value)} placeholder='Type a message' value={message} onKeyDown={(e) => e.key === 'Enter' && onClickSend(e)} />
+                        <button type='button' onClick={onClickSend} className={classes.messageSendButton}>{'Send'}</button>
+                    </div>
+                }
             </div>
             { showUsers && <RoomUsers users={roomUsers} setShowUsers={setShowUsers} /> }
         </div>

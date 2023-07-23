@@ -104,7 +104,12 @@ export const Chat = () => {
         }, () => {
             setMessage('')
         })
-        
+    }
+
+    const privateMessageHandler = (user: string) => {
+        setIsPrivateMessage(true)
+        setPrivateMessageUser(user)
+        setShowUsers(false)
     }
     
     return (
@@ -144,7 +149,13 @@ export const Chat = () => {
                     </div>
                 }
             </div>
-            { showUsers && <RoomUsers users={roomUsers} setShowUsers={setShowUsers} /> }
+            { showUsers && 
+                <RoomUsers 
+                    users={roomUsers} 
+                    setShowUsers={setShowUsers} 
+                    privateMessageHandler={privateMessageHandler}
+                /> 
+            }
         </div>
     )
 }

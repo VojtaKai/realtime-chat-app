@@ -4,6 +4,7 @@ import classes from './RoomUsers.module.css'
 interface RoomUsers {
     users: string[]
     setShowUsers: React.Dispatch<React.SetStateAction<boolean>>
+    privateMessageHandler: (user: string) => void 
 }
 
 export const RoomUsers = (props: RoomUsers) => {
@@ -15,7 +16,7 @@ export const RoomUsers = (props: RoomUsers) => {
                         {
                             props.users.map(user => {
                                 return (
-                                    <h6 key={user} className={classes.users}>{user}</h6>
+                                    <h6 key={user} className={classes.users} onDoubleClick={() => props.privateMessageHandler(user)}>{user}</h6>
                                 )
                             })
                         }

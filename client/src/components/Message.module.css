@@ -20,7 +20,7 @@
     color: black;
     font-size: small;
     word-wrap: break-word;
-    word-break: break-word;
+    word-break: normal;
 }
 
 @media only screen and (min-width: 600px) {

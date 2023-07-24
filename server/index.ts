@@ -73,9 +73,11 @@ io.on('connection', (socket) => {
             return
         }
         const user = getUser(socket.id)
+
         if (!user) {
             return console.error('Missing user!!!')
         }
+
         // io sends it to everyone, socket.emit would not reach the author of the message - socket ignores the socket.id user
         io.to(user.room).emit('message', {
             user: user.name, // back to lowercase
@@ -86,7 +88,6 @@ io.on('connection', (socket) => {
     })
 
     socket.on('sendPrivateMessage', (payload, callback) => {
-        console.log('sendPrivateMessage', payload)
         if (!payload.text) {
             return
         }

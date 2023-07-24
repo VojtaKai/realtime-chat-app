@@ -19,6 +19,8 @@
 .message {
     color: black;
     font-size: small;
+    word-wrap: break-word;
+    word-break: break-word;
 }
 
 @media only screen and (min-width: 600px) {

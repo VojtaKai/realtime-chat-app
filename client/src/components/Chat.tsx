@@ -56,17 +56,11 @@ export const Chat = () => {
     }, [io, ENDPOINT, search])
 
     React.useEffect(() => {
-        socket.on('message', (message: MessagePayload) => {
-            console.log('Message From The Server:' + 'User:', message.user, '\nText:', message.text)
-            setMessages(prevMessages => [...prevMessages, message])
-        })
+        socket.on('message', (message: MessagePayload) => setMessages(prevMessages => [...prevMessages, message]))
     }, [socket])
 
     React.useEffect(() => {
-        socket.on('privateMessage', (message: PrivateMessagePayload) => {
-            console.log('Message From The Server:' + 'User:', message.user, '\nText:', message.text)
-            setMessages(prevMessages => [...prevMessages, message])
-        })
+        socket.on('privateMessage', (message: PrivateMessagePayload) => setMessages(prevMessages => [...prevMessages, message]))
     }, [socket])
 
     React.useEffect(() => {
@@ -80,7 +74,6 @@ export const Chat = () => {
     }, [privateMessageUser, inputRef, inputRef.current])
 
     const onClickSend = (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent<HTMLTextAreaElement>) => {
-        console.log('sendMessage', message)
         e.preventDefault()
         if (!message) {
             return
@@ -94,7 +87,6 @@ export const Chat = () => {
     }
 
     const onClickSendPrivate = (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent<HTMLTextAreaElement>) => {
-        console.log('sendPrivateMessage', message)
         e.preventDefault()
         if (!message) {
             return
@@ -119,19 +111,28 @@ export const Chat = () => {
         setShowUsers(false)
         inputRef.current?.focus()
     }
+
+    const onClickShowUsersHandler = () => setShowUsers(prevState => !prevState)
+
+    const onChangeMessageHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => setMessage(e.target.value)
+
+    const onClickPrivateMessageHandler = () => {
+        setIsPrivateMessage(false)
+        setPrivateMessageUser('')
+    }
     
     return (
         <div className={classes.chatWindowOuter}>
             <div className={showUsers ? classes.chatWindowInnerSmall : classes.chatWindowInnerLarge}>
-                <InfoBar room={room} setShowUsers={setShowUsers} />
+                <InfoBar room={room} onClickShowUsersHandler={onClickShowUsersHandler} />
                 <MessageSection name={name} messages={messages} isMessageOwner={isMessageOwner} setIsPrivateMessage={setIsPrivateMessage} setPrivateMessageUser={setPrivateMessageUser} />
-                <InputBar ref={inputRef} message={message} setMessage={setMessage} privateMessageUser={privateMessageUser} setIsPrivateMessage={setIsPrivateMessage} setPrivateMessageUser={setPrivateMessageUser} onClickSend={onClickSend} onClickSendPrivate={onClickSendPrivate} isPrivateMessage={isPrivateMessage} />
+                <InputBar ref={inputRef} message={message} onChangeMessageHandler={onChangeMessageHandler} privateMessageUser={privateMessageUser} onClickPrivateMessageHandler={onClickPrivateMessageHandler} onClickSend={onClickSend} onClickSendPrivate={onClickSendPrivate} isPrivateMessage={isPrivateMessage} />
             </div>
             { showUsers && 
                 <RoomUsers 
                     users={roomUsers} 
-                    setShowUsers={setShowUsers} 
                     privateMessageHandler={privateMessageHandler}
+                    onClickShowUsersHandler={onClickShowUsersHandler}
                 /> 
             }
         </div>

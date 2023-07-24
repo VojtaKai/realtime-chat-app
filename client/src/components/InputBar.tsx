@@ -7,31 +7,27 @@ interface InputBarProps {
     message: string
     isPrivateMessage: boolean
     privateMessageUser: string
-    setIsPrivateMessage: React.Dispatch<React.SetStateAction<boolean>> // replace by on click cancel private message
-    setPrivateMessageUser: React.Dispatch<React.SetStateAction<string>> // replace by on click cancel private message
-    setMessage: React.Dispatch<React.SetStateAction<string>> // replace by onChangeMessageHandler
+    onClickPrivateMessageHandler: () => void
+    onChangeMessageHandler: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
     onClickSendPrivate: (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent<HTMLTextAreaElement>) => void
     onClickSend: (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent<HTMLTextAreaElement>) => void
 }
 
-export const InputBar = React.forwardRef((props: InputBarProps, inputRef: any) => {
-    const { message, isPrivateMessage, privateMessageUser, setIsPrivateMessage, setPrivateMessageUser, setMessage, onClickSend, onClickSendPrivate } = props
+export const InputBar = React.forwardRef((props: InputBarProps, inputRef: React.ForwardedRef<HTMLTextAreaElement | null>) => {
+    const { message, isPrivateMessage, privateMessageUser, onChangeMessageHandler, onClickSend, onClickPrivateMessageHandler, onClickSendPrivate } = props
 
     return (
         <>
             { isPrivateMessage ? 
                 <div className={classes.messageInputEnvelope} >
                     <h6 style={{height: '36px', margin: '0px'}}>{`Private message to ${privateMessageUser}`}</h6>
-                    <AiOutlineStop size={16} style={{alignSelf: 'center', cursor: 'pointer'}} onClick={() => {
-                        setIsPrivateMessage(false)
-                        setPrivateMessageUser('')
-                    }} />
-                    <textarea ref={inputRef} className={classes.messageTextArea} onChange={(e) => setMessage(e.target.value)} placeholder='Type a message' value={message} onKeyDown={(e) => e.key === 'Enter' && onClickSendPrivate(e)} />
+                    <AiOutlineStop size={16} style={{alignSelf: 'center', cursor: 'pointer'}} onClick={onClickPrivateMessageHandler} />
+                    <textarea ref={inputRef} className={classes.messageTextArea} onChange={onChangeMessageHandler} placeholder='Type a message' value={message} onKeyDown={(e) => e.key === 'Enter' && onClickSendPrivate(e)} />
                     <button type='button' onClick={onClickSendPrivate} className={classes.messageSendButton}>{'Send'}</button>
                 </div>
                 : 
                 <div className={classes.messageInputEnvelope}>
-                    <textarea ref={inputRef} className={classes.messageTextArea} onChange={(e) => setMessage(e.target.value)} placeholder='Type a message' value={message} onKeyDown={(e) => e.key === 'Enter' && onClickSend(e)} />
+                    <textarea ref={inputRef} className={classes.messageTextArea} onChange={onChangeMessageHandler} placeholder='Type a message' value={message} onKeyDown={(e) => e.key === 'Enter' && onClickSend(e)} />
                     <button type='button' onClick={onClickSend} className={classes.messageSendButton}>{'Send'}</button>
                 </div>
                         

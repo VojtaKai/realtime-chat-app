@@ -1,0 +1,12 @@
+.chatMessageSection {
+    height: calc(100% - 70px - 36px);
+    max-height: calc(100% - 70px - 36px);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.chatMessageSectionChildren {
+    display: flex;
+    flex-direction: column;
+}

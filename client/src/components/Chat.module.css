@@ -1,34 +1,7 @@
-.black {
-    color: black
-}
-
 .chatWindowOuter {
     height: 100%;
     width: 100%;
     background-color: white;
-    display: flex;
-    flex-direction: column;
-}
-
-.infoBar {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex-grow: 0;
-    padding: 0px 10px 10px 10px;
-    color: black;
-    background-color: #274eff;
-}
-
-.chatMessageSection {
-    height: calc(100% - 70px - 36px);
-    max-height: calc(100% - 70px - 36px);
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.chatMessageSectionChildren {
     display: flex;
     flex-direction: column;
 }
@@ -50,24 +23,5 @@
     .chatWindowInnerSmall {
         height: 80vh;
         width: 40vw;
-    }
-
-    .messageInputEnvelope {
-        display: flex;
-        flex-direction: row;
-        flex-grow: 0;
-        align-items: flex-end;
-    }
-
-    .messageTextArea {
-        width: 90%;
-        max-height: 36px;
-        resize: none;
-    }
-
-    .messageSendButton {
-        width: 10%;
-        height: 36px;
-        font-weight: 500;
     }
 }

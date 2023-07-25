@@ -1,7 +1,6 @@
 .containerOuter {
-    height: 20vh;
+    height: 40vh;
     width: 100vw;
-    border-left: 2px solid black;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -9,7 +8,7 @@
 
 .container {
     height: calc(100% - 60px);
-    width: 20vw;
+    width: 99vw;
     display: flex;
     justify-content: end;
 }
@@ -40,10 +39,17 @@
 @media only screen and (min-width: 800px) {
     .containerOuter {
         height: 80vh;
-        width: 20vw;
+        width: 40vw;
         border-left: 2px solid black;
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+
+    .container {
+        height: calc(100% - 60px);
+        width: 20vw;
+        display: flex;
+        justify-content: end;
     }
 }

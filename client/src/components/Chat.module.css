@@ -1,6 +1,6 @@
 .chatWindowOuter {
     height: 100vh;
-    width: 98vw;
+    width: 100vw;
     background-color: white;
     display: flex;
     flex-direction: column;
@@ -12,7 +12,7 @@
 }
 
 .chatWindowInnerSmall {
-    height: 80vh;
+    height: 60vh;
     width: 100vw;
 }
 

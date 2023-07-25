@@ -16,6 +16,19 @@
     border-radius: 10px;
 }
 
+.messageEnvelopeOuterRight {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.messageEnvelopeOuterLeft {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 .message {
     color: black;
     font-size: small;
@@ -23,20 +36,7 @@
     word-break: normal;
 }
 
-@media only screen and (min-width: 600px) {
-    .messageEnvelopeOuterRight {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-end;
-    }
-
-    .messageEnvelopeOuterLeft {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-    }
-
+@media only screen and (min-width: 800px) {
     .messageEnvelope {
         border: 2px solid rgb(11, 11, 253);
         width: auto;

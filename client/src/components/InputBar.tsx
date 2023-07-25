@@ -20,13 +20,17 @@ export const InputBar = React.forwardRef((props: InputBarProps, inputRef: React.
         <>
             { isPrivateMessage ? 
                 <div className={classes.messageInputEnvelope} >
-                    <h6 style={{height: '36px', margin: '0px'}}>{`Private message to ${privateMessageUser}`}</h6>
-                    <AiOutlineStop size={16} style={{alignSelf: 'center', cursor: 'pointer'}} onClick={onClickPrivateMessageHandler} />
-                    <textarea ref={inputRef} className={classes.messageTextArea} onChange={onChangeMessageHandler} placeholder='Type a message' value={message} onKeyDown={(e) => e.key === 'Enter' && onClickSendPrivate(e)} />
-                    <button type='button' onClick={onClickSendPrivate} className={classes.messageSendButton}>{'Send'}</button>
+                    <div className={classes.privateSection}>
+                        <h6 className={classes.h6}>{`Private message to ${privateMessageUser}`}</h6>
+                        <AiOutlineStop size={16} style={{alignSelf: 'center', cursor: 'pointer'}} onClick={onClickPrivateMessageHandler} />
+                    </div>
+                    <div className={classes.inputSection}>
+                        <textarea ref={inputRef} className={classes.messageTextArea} onChange={onChangeMessageHandler} placeholder='Type a message' value={message} onKeyDown={(e) => e.key === 'Enter' && onClickSendPrivate(e)} />
+                        <button type='button' onClick={onClickSendPrivate} className={classes.messageSendButton}>{'Send'}</button>
+                    </div>
                 </div>
                 : 
-                <div className={classes.messageInputEnvelope}>
+                <div className={classes.messageInputOnlyEnvelope}>
                     <textarea ref={inputRef} className={classes.messageTextArea} onChange={onChangeMessageHandler} placeholder='Type a message' value={message} onKeyDown={(e) => e.key === 'Enter' && onClickSend(e)} />
                     <button type='button' onClick={onClickSend} className={classes.messageSendButton}>{'Send'}</button>
                 </div>

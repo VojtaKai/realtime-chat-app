@@ -1,9 +1,60 @@
+.messageInputEnvelope {
+    display: flex;
+    flex-direction: column;
+}
+
+.messageTextArea {
+    width: 90%;
+    max-height: 36px;
+    resize: none;
+}
+
+.privateSection {
+    display: flex;
+    flex-direction: row;
+    column-gap: 10px;
+    align-self: center;
+}
+
+.inputSection {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.messageSendButton {
+    width: 10%;
+    height: 36px;
+    font-weight: 500;
+} 
+
+.messageInputOnlyEnvelope {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 0;
+    align-items: center;
+}
+
 @media only screen and (min-width: 600px) {
     .messageInputEnvelope {
         display: flex;
         flex-direction: row;
         flex-grow: 0;
-        align-items: flex-end;
+        align-items: flex-start;
+        max-height: "36px"
+    }
+
+    .privateSection {
+        display: flex;
+        flex-direction: row;
+        max-height: "36px";
+        column-gap: 5px;
+    }
+
+    .inputSection {
+        display: flex;
+        flex-direction: row;
+        flex-grow: 1;
     }
 
     .messageTextArea {
@@ -14,7 +65,12 @@
 
     .messageSendButton {
         width: 10%;
+        min-width: 50px;
         height: 36px;
         font-weight: 500;
+    }
+
+    .h6 {
+        margin: 0px
     }
 }

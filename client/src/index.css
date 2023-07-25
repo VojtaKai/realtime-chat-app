@@ -6,3 +6,10 @@ body {
   min-height: 100vh;
   background-color: black;
 }
+
+
+@media only screen and (max-width: 800px) {
+  #root {
+    padding: 0px;
+  }
+}

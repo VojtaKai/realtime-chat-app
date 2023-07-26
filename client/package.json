@@ -7,9 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "prettier": "prettier --ignore-path .gitignore \"**/*.+(ts|tsx)\"",
-    "format": "npm run prettier -- --write",
-    "check-format": "npm run prettier -- --list-different",
+    "fix": "npm run lint -- --fix",
     "preview": "vite preview"
   },
   "dependencies": {

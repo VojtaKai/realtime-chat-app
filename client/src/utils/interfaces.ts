@@ -1,27 +1,27 @@
 export interface ServerToClientEvents {
-    message: (payload: MessagePayload) => void;
-    privateMessage: (payload: PrivateMessagePayload) => void;
-    roomUsers: (payload: RoomUsersPayload) => void;
-  }
-  
-export interface ClientToServerEvents {
-    join: (name: string, room: string, cb: (error: string) => void) => void;
-    sendMessage: (payload: MessagePayload, cb: () => void) => void;
-    sendPrivateMessage: (payload: PrivateMessagePayload, cb: () => void) => void;
+    message: (payload: MessagePayload) => void
+    privateMessage: (payload: PrivateMessagePayload) => void
+    roomUsers: (payload: RoomUsersPayload) => void
 }
-  
+
+export interface ClientToServerEvents {
+    join: (name: string, room: string, cb: (error: string) => void) => void
+    sendMessage: (payload: MessagePayload, cb: () => void) => void
+    sendPrivateMessage: (payload: PrivateMessagePayload, cb: () => void) => void
+}
+
 export interface InterServerEvents {
-    ping: () => void;
+    ping: () => void
 }
 
 export interface SocketData {
-    name: string;
-    age: number;
+    name: string
+    age: number
 }
 
 export interface MessagePayload {
-    user: string;
-    text: string;
+    user: string
+    text: string
 }
 
 export interface PrivateMessagePayload extends MessagePayload {

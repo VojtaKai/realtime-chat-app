@@ -1,5 +1,3 @@
 export function ErrorElement() {
-  return (
-    <div>Unknown Path</div>
-  )
+    return <div>Unknown Path</div>
 }

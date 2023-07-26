@@ -3,11 +3,11 @@ Realtime chat application created using Socket.io, ReactJS, and NodeJS.
 Users can join different rooms, chat with all participants in the room or send private messages 
 
 # Technologies
-ReactJS
-NodeJS
-Socket.io
-Vite
-NPM
+- ReactJS
+- NodeJS
+- Socket.io
+- Vite
+- npm
 
 # Start locally
 Start the App by going to the client folder and run `npm run dev`

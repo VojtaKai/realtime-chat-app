@@ -6,7 +6,6 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-type-checked',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'plugin:react-hooks/recommended',
     'plugin:prettier/recommended'
@@ -32,4 +31,8 @@ module.exports = {
     "consistent-return": "error",
     "no-trailing-spaces": "error"
   },
+  ignorePatterns: [
+    "*.cjs",
+    "*.config.*"
+  ]
 }

@@ -34,3 +34,6 @@ Socket io - emit cheatsheet - https://socket-io.translate.goog/docs/v4/emit-chea
 # Eslint rules and setup
 https://eslint.org/docs/latest/rules/
 https://www.aleksandrhovhannisyan.com/blog/format-code-on-save-vs-code-eslint/
+
+# Prettier options
+https://prettier.io/docs/en/options.html

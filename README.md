@@ -10,10 +10,10 @@ Vite
 NPM
 
 # Start locally
-Start the App by going to the client folder and run [npm run dev]
+Start the App by going to the client folder and run `npm run dev`
 It will expose the app on port 5173. Visit the SPA on localhost:5173
 
-Start the Web Server by going to the server folder and run [npm start]
+Start the Web Server by going to the server folder and run `npm start`
 It will expose the server on port 3000.
 
 

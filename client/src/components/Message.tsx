@@ -25,7 +25,7 @@ export const Message = (props: MessageProps) => {
     return (
         <div className={ isOwner ? classes.messageEnvelopeOuterRight : classes.messageEnvelopeOuterLeft}>
             {isOwner && !isPrivate && <h1 className={classes.message}>{'You'}</h1>}
-            {isOwner && isPrivate && <h1 className={classes.message}>{`Whispering to ${targetUser}`}</h1>}
+            {isOwner && isPrivate && targetUser && <h1 className={classes.message}>{`Whispering to ${targetUser}`}</h1>}
             <div className={message.isPrivate ? classes.messageEnvelopePrivate : classes.messageEnvelope} onDoubleClick={onDoubleClickHandler} >
                 <h1 className={classes.message}>{text}</h1>
             </div>

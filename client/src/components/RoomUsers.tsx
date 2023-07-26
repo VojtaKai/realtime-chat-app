@@ -1,12 +1,12 @@
 import classes from './RoomUsers.module.css'
 
-interface RoomUsers {
+interface RoomUsersProps {
     users: string[]
     onClickShowUsersHandler: () => void
     privateMessageHandler: (user: string) => void
 }
 
-export const RoomUsers = (props: RoomUsers) => {
+export const RoomUsers = (props: RoomUsersProps) => {
     const { users, onClickShowUsersHandler, privateMessageHandler} = props
 
     return (

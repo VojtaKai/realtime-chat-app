@@ -53,7 +53,7 @@ export const Chat = () => {
             socket.send()
             setMessages([])
         }
-    }, [io, ENDPOINT, search])
+    }, [search, name, room])
 
     React.useEffect(() => {
         socket.on('message', (message: MessagePayload) => setMessages(prevMessages => [...prevMessages, message]))
@@ -71,7 +71,7 @@ export const Chat = () => {
 
     React.useEffect(() => {
         inputRef.current?.focus()
-    }, [privateMessageUser, inputRef, inputRef.current])
+    }, [privateMessageUser, inputRef])
 
     const onClickSend = (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent<HTMLTextAreaElement>) => {
         e.preventDefault()
@@ -118,7 +118,7 @@ export const Chat = () => {
 
     const onClickPrivateMessageHandler = () => {
         setIsPrivateMessage(false)
-        setPrivateMessageUser('')
+        setPrivateMessageUser("")
     }
     
     return (

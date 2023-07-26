@@ -6,6 +6,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-type-checked',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'plugin:react-hooks/recommended',
     'plugin:prettier/recommended'
@@ -28,8 +29,6 @@ module.exports = {
     "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
     "no-console": "warn",
     "no-param-reassign": "warn",
-    "camelcase": "off",
-    "@typescript-eslint/camelcase": "off",
     "consistent-return": "error",
     "no-trailing-spaces": "error"
   },

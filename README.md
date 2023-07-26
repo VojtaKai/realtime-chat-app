@@ -31,5 +31,6 @@ https://socket.io/docs/v3/handling-cors/
 # Socket.io cheatsheet
 Socket io - emit cheatsheet - https://socket-io.translate.goog/docs/v4/emit-cheatsheet?_x_tr_sl=en&_x_tr_tl=cs&_x_tr_hl=cs&_x_tr_pto=sc
 
-# Eslint rules
+# Eslint rules and setup
 https://eslint.org/docs/latest/rules/
+https://www.aleksandrhovhannisyan.com/blog/format-code-on-save-vs-code-eslint/

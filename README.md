@@ -37,6 +37,7 @@ https://socket.io/docs/v4/emit-cheatsheet/
 
 ## Eslint rules and setup
 https://eslint.org/docs/latest/rules/ \
+https://eslint.org/docs/latest/use/getting-started (manual or automatic setup) \ 
 https://www.aleksandrhovhannisyan.com/blog/format-code-on-save-vs-code-eslint/
 
 ## Prettier options

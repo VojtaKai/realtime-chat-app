@@ -17,9 +17,7 @@
         "project": true,
         "tsconfigRootDir": "__dirname"
     },
-    "plugins": [
-        "@typescript-eslint", "prettier"
-    ],
+    "plugins": [ "@typescript-eslint", "prettier" ],
     "rules": {
         "indent": [
             "error",
@@ -40,7 +38,13 @@
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": ["error", {
             "argsIgnorePattern": "^_"
-        }]
+        }],
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unsafe-argument": "off",
+        "@typescript-eslint/no-unsafe-member-access": "off",
+        "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
+        "no-trailing-spaces": "error",
+        "arrow-parens": ["error", "as-needed"]
     },
     "ignorePatterns": [
         "node_modules",

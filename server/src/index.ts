@@ -2,7 +2,12 @@ import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { router } from "./router";
-import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from "./utils/interfaces";
+import {
+    ClientToServerEvents,
+    InterServerEvents,
+    ServerToClientEvents,
+    SocketData,
+} from "./utils/interfaces";
 import { addUser, getUser, getUserByName, getUsersInRoom, removeUser } from "./users";
 
 const PORT = Number(process.env.PORT) || 3000;
@@ -10,22 +15,25 @@ const PORT = Number(process.env.PORT) || 3000;
 const app = express();
 const server = createServer(app);
 
-const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>(server, {
-    cors: {
-        origin: "*",
-        methods: "*",
-        allowedHeaders: "*",
-    },
-});
+const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>(
+    server,
+    {
+        cors: {
+            origin: "*",
+            methods: "*",
+            allowedHeaders: "*",
+        },
+    }
+);
 
 io.on("connection", socket => {
-    socket.on("join", (name, room, cb) => {
+    socket.on("join", async (name, room, cb) => {
         try {
             const addedUser = addUser(socket.id, name, room);
 
             // socket.join adds users to a specific room - room is an independent space from other rooms
             // to leave a room perform socket.leave(room)
-            socket.join(addedUser.room);
+            await socket.join(addedUser.room);
 
             socket.emit("message", {
                 user: "admin",
@@ -44,7 +52,7 @@ io.on("connection", socket => {
                 users: getUsersInRoom(room),
             });
         } catch (error: any) {
-            return cb(error.message);
+            return cb(error.message ?? "");
         }
     });
 

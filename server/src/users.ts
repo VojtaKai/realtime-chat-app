@@ -15,7 +15,7 @@ export const addUser = (socketId: string, name: string, room: string) => {
     const user: User = {
         socketId,
         name,
-        room
+        room,
     };
 
     users.push(user);
@@ -33,6 +33,7 @@ export const removeUser = (socketId: string) => {
 
 export const getUser = (socketId: string) => users.find(user => user.socketId === socketId);
 
-export const getUserByName = (name: string) => users.find(user => user.name === name.replace(" ", "").trim().toLowerCase());
+export const getUserByName = (name: string) =>
+    users.find(user => user.name === name.replace(" ", "").trim().toLowerCase());
 
 export const getUsersInRoom = (room: string) => users.filter(user => user.room === room).map(user => user.name);

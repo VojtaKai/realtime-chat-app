@@ -11,8 +11,7 @@ interface MessageProps {
 }
 
 export const Message = (props: MessageProps) => {
-    const { isOwner, message, setIsPrivateMessage, setPrivateMessageUser } =
-        props
+    const { isOwner, message, setIsPrivateMessage, setPrivateMessageUser } = props
     const { text, user, targetUser, isPrivate } = message
 
     const onDoubleClickHandler = () => {
@@ -24,37 +23,17 @@ export const Message = (props: MessageProps) => {
     }
 
     return (
-        <div
-            className={
-                isOwner
-                    ? classes.messageEnvelopeOuterRight
-                    : classes.messageEnvelopeOuterLeft
-            }
-        >
-            {isOwner && !isPrivate && (
-                <h1 className={classes.message}>{"You"}</h1>
-            )}
-            {isOwner && isPrivate && targetUser && (
-                <h1
-                    className={classes.message}
-                >{`Whispering to ${targetUser}`}</h1>
-            )}
+        <div className={isOwner ? classes.messageEnvelopeOuterRight : classes.messageEnvelopeOuterLeft}>
+            {isOwner && !isPrivate && <h1 className={classes.message}>{"You"}</h1>}
+            {isOwner && isPrivate && targetUser && <h1 className={classes.message}>{`Whispering to ${targetUser}`}</h1>}
             <div
-                className={
-                    message.isPrivate
-                        ? classes.messageEnvelopePrivate
-                        : classes.messageEnvelope
-                }
+                className={message.isPrivate ? classes.messageEnvelopePrivate : classes.messageEnvelope}
                 onDoubleClick={onDoubleClickHandler}
             >
                 <h1 className={classes.message}>{text}</h1>
             </div>
-            {!isOwner && !isPrivate && (
-                <h1 className={classes.message}>{user}</h1>
-            )}
-            {!isOwner && isPrivate && (
-                <h1 className={classes.message}>{`${user} whispers`}</h1>
-            )}
+            {!isOwner && !isPrivate && <h1 className={classes.message}>{user}</h1>}
+            {!isOwner && isPrivate && <h1 className={classes.message}>{`${user} whispers`}</h1>}
         </div>
     )
 }

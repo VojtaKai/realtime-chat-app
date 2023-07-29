@@ -13,21 +13,14 @@ export const RoomUsers = (props: RoomUsersProps) => {
         <div className={classes.containerOuter}>
             <div className={classes.container}>
                 <div className={classes.userTable}>
-                    {users.map((user) => (
-                        <h4
-                            key={user}
-                            className={classes.users}
-                            onDoubleClick={() => privateMessageHandler(user)}
-                        >
+                    {users.map(user => (
+                        <h4 key={user} className={classes.users} onDoubleClick={() => privateMessageHandler(user)}>
                             {user}
                         </h4>
                     ))}
                 </div>
             </div>
-            <button
-                className={classes.button}
-                onClick={onClickShowUsersHandler}
-            >
+            <button className={classes.button} onClick={onClickShowUsersHandler}>
                 Close
             </button>
         </div>

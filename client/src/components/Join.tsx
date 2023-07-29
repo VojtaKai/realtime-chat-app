@@ -53,9 +53,7 @@ export const Join = () => {
                     Sign In
                 </button>
             </Link>
-            {!!errorMessage && (
-                <h3 className={classes.errorMessage}>{errorMessage}</h3>
-            )}
+            {!!errorMessage && <h3 className={classes.errorMessage}>{errorMessage}</h3>}
         </div>
     )
 }

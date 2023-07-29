@@ -19,8 +19,7 @@ import classes from "./Chat.module.css"
 const ENDPOINT = "localhost:3000"
 
 const isMessageOwner = (name: string, messageAuthor: string) =>
-    name.replace(" ", "").trim().toLowerCase() ===
-    messageAuthor.replace(" ", "").trim().toLowerCase()
+    name.replace(" ", "").trim().toLowerCase() === messageAuthor.replace(" ", "").trim().toLowerCase()
 
 export const Chat = () => {
     const { search } = useLocation()
@@ -36,23 +35,18 @@ export const Chat = () => {
 
     const [roomUsers, setRoomUsers] = React.useState<string[]>([])
 
-    const [isPrivateMessage, setIsPrivateMessage] =
-        React.useState<boolean>(false)
-    const [privateMessageUser, setPrivateMessageUser] =
-        React.useState<string>("")
+    const [isPrivateMessage, setIsPrivateMessage] = React.useState<boolean>(false)
+    const [privateMessageUser, setPrivateMessageUser] = React.useState<string>("")
 
-    const [socket, setSocket] = React.useState<
-        Socket<ServerToClientEvents, ClientToServerEvents>
-    >(io(ENDPOINT))
+    const [socket, setSocket] = React.useState<Socket<ServerToClientEvents, ClientToServerEvents>>(io(ENDPOINT))
 
     const inputRef = React.useRef<HTMLTextAreaElement | null>(null)
 
     React.useEffect(() => {
-        const socket: Socket<ServerToClientEvents, ClientToServerEvents> =
-            io(ENDPOINT)
+        const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(ENDPOINT)
         setSocket(socket)
 
-        socket.emit("join", name, room, (errorMessage) => alert(errorMessage))
+        socket.emit("join", name, room, errorMessage => alert(errorMessage))
 
         return () => {
             socket.disconnect()
@@ -63,14 +57,12 @@ export const Chat = () => {
     }, [search, name, room])
 
     React.useEffect(() => {
-        socket.on("message", (message: MessagePayload) =>
-            setMessages((prevMessages) => [...prevMessages, message])
-        )
+        socket.on("message", (message: MessagePayload) => setMessages(prevMessages => [...prevMessages, message]))
     }, [socket])
 
     React.useEffect(() => {
         socket.on("privateMessage", (message: PrivateMessagePayload) =>
-            setMessages((prevMessages) => [...prevMessages, message])
+            setMessages(prevMessages => [...prevMessages, message])
         )
     }, [socket])
 
@@ -85,9 +77,7 @@ export const Chat = () => {
     }, [privateMessageUser, inputRef])
 
     const onClickSend = (
-        e:
-            | React.MouseEvent<HTMLButtonElement, MouseEvent>
-            | React.KeyboardEvent<HTMLTextAreaElement>
+        e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent<HTMLTextAreaElement>
     ) => {
         e.preventDefault()
         if (!message) {
@@ -105,9 +95,7 @@ export const Chat = () => {
     }
 
     const onClickSendPrivate = (
-        e:
-            | React.MouseEvent<HTMLButtonElement, MouseEvent>
-            | React.KeyboardEvent<HTMLTextAreaElement>
+        e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent<HTMLTextAreaElement>
     ) => {
         e.preventDefault()
         if (!message) {
@@ -138,12 +126,9 @@ export const Chat = () => {
         inputRef.current?.focus()
     }
 
-    const onClickShowUsersHandler = () =>
-        setShowUsers((prevState) => !prevState)
+    const onClickShowUsersHandler = () => setShowUsers(prevState => !prevState)
 
-    const onChangeMessageHandler = (
-        e: React.ChangeEvent<HTMLTextAreaElement>
-    ) => setMessage(e.target.value)
+    const onChangeMessageHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => setMessage(e.target.value)
 
     const onClickPrivateMessageHandler = () => {
         setIsPrivateMessage(false)
@@ -152,17 +137,8 @@ export const Chat = () => {
 
     return (
         <div className={classes.chatWindowOuter}>
-            <div
-                className={
-                    showUsers
-                        ? classes.chatWindowInnerSmall
-                        : classes.chatWindowInnerLarge
-                }
-            >
-                <InfoBar
-                    room={room}
-                    onClickShowUsersHandler={onClickShowUsersHandler}
-                />
+            <div className={showUsers ? classes.chatWindowInnerSmall : classes.chatWindowInnerLarge}>
+                <InfoBar room={room} onClickShowUsersHandler={onClickShowUsersHandler} />
                 <MessageSection
                     name={name}
                     messages={messages}

@@ -13,20 +13,14 @@ interface MessageSectionProps {
 }
 
 export const MessageSection = (props: MessageSectionProps) => {
-    const {
-        name,
-        messages,
-        isMessageOwner,
-        setIsPrivateMessage,
-        setPrivateMessageUser,
-    } = props
+    const { name, messages, isMessageOwner, setIsPrivateMessage, setPrivateMessageUser } = props
     return (
         <ScrollToTheBottom
             className={classes.chatMessageSection}
             mode="bottom"
             scrollViewClassName={classes.chatMessageSectionChildren}
         >
-            {messages.map((message) => (
+            {messages.map(message => (
                 <Message
                     message={message}
                     key={Math.random().toString()}

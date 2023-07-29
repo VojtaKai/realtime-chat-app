@@ -29,7 +29,8 @@ module.exports = {
     "no-console": "warn",
     "no-param-reassign": "warn",
     "consistent-return": "error",
-    "no-trailing-spaces": "error"
+    "no-trailing-spaces": "error",
+    "arrow-parens": ["error", "as-needed"]
   },
   ignorePatterns: [
     "*.cjs",

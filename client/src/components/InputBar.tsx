@@ -10,22 +10,13 @@ interface InputBarProps {
     onClickPrivateMessageHandler: () => void
     onChangeMessageHandler: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
     onClickSendPrivate: (
-        e:
-            | React.MouseEvent<HTMLButtonElement, MouseEvent>
-            | React.KeyboardEvent<HTMLTextAreaElement>
+        e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent<HTMLTextAreaElement>
     ) => void
-    onClickSend: (
-        e:
-            | React.MouseEvent<HTMLButtonElement, MouseEvent>
-            | React.KeyboardEvent<HTMLTextAreaElement>
-    ) => void
+    onClickSend: (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent<HTMLTextAreaElement>) => void
 }
 
 export const InputBar = React.forwardRef(
-    (
-        props: InputBarProps,
-        inputRef: React.ForwardedRef<HTMLTextAreaElement | null>
-    ) => {
+    (props: InputBarProps, inputRef: React.ForwardedRef<HTMLTextAreaElement | null>) => {
         const {
             message,
             isPrivateMessage,
@@ -41,9 +32,7 @@ export const InputBar = React.forwardRef(
                 {isPrivateMessage ? (
                     <div className={classes.messageInputEnvelope}>
                         <div className={classes.privateSection}>
-                            <h6
-                                className={classes.h6}
-                            >{`Private message to ${privateMessageUser}`}</h6>
+                            <h6 className={classes.h6}>{`Private message to ${privateMessageUser}`}</h6>
                             <AiOutlineStop
                                 size={16}
                                 style={{
@@ -60,15 +49,9 @@ export const InputBar = React.forwardRef(
                                 onChange={onChangeMessageHandler}
                                 placeholder="Type a message"
                                 value={message}
-                                onKeyDown={(e) =>
-                                    e.key === "Enter" && onClickSendPrivate(e)
-                                }
+                                onKeyDown={e => e.key === "Enter" && onClickSendPrivate(e)}
                             />
-                            <button
-                                type="button"
-                                onClick={onClickSendPrivate}
-                                className={classes.messageSendButton}
-                            >
+                            <button type="button" onClick={onClickSendPrivate} className={classes.messageSendButton}>
                                 {"Send"}
                             </button>
                         </div>
@@ -81,15 +64,9 @@ export const InputBar = React.forwardRef(
                             onChange={onChangeMessageHandler}
                             placeholder="Type a message"
                             value={message}
-                            onKeyDown={(e) =>
-                                e.key === "Enter" && onClickSend(e)
-                            }
+                            onKeyDown={e => e.key === "Enter" && onClickSend(e)}
                         />
-                        <button
-                            type="button"
-                            onClick={onClickSend}
-                            className={classes.messageSendButton}
-                        >
+                        <button type="button" onClick={onClickSend} className={classes.messageSendButton}>
                             {"Send"}
                         </button>
                     </div>

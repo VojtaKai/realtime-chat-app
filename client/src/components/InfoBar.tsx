@@ -23,11 +23,7 @@ export const InfoBar = (props: InfoBarProps) => {
                     style={{ cursor: "pointer", marginRight: "40px" }}
                     onClick={onClickShowUsersHandler}
                 />
-                <GiExitDoor
-                    size={48}
-                    style={{ cursor: "pointer" }}
-                    onClick={() => navigate("/")}
-                />
+                <GiExitDoor size={48} style={{ cursor: "pointer" }} onClick={() => navigate("/")} />
             </div>
         </div>
     )

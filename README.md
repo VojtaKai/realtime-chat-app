@@ -38,7 +38,8 @@ https://socket.io/docs/v4/emit-cheatsheet/
 ## Eslint rules and setup
 https://eslint.org/docs/latest/rules/ \
 https://eslint.org/docs/latest/use/getting-started (manual or automatic setup) \ 
-https://www.aleksandrhovhannisyan.com/blog/format-code-on-save-vs-code-eslint/
+https://www.aleksandrhovhannisyan.com/blog/format-code-on-save-vs-code-eslint/ \
+https://blog.logrocket.com/linting-typescript-eslint-prettier/#integrating-prettier
 
 ## Prettier options
 https://prettier.io/docs/en/options.html

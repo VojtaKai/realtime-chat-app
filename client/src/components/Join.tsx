@@ -1,11 +1,11 @@
-import React from "react"
-import { Link } from "react-router-dom"
-import classes from "./Join.module.css"
+import React from 'react'
+import {Link} from 'react-router-dom'
+import classes from './Join.module.css'
 
 export const Join = () => {
-    const [name, setName] = React.useState("")
-    const [room, setRoom] = React.useState("")
-    const [errorMessage, setErrorMessage] = React.useState("")
+    const [name, setName] = React.useState('')
+    const [room, setRoom] = React.useState('')
+    const [errorMessage, setErrorMessage] = React.useState('')
 
     const nameChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value)
@@ -17,12 +17,12 @@ export const Join = () => {
 
     const onClickEnter = (e: React.MouseEvent) => {
         if (!name) {
-            setErrorMessage("Enter your username")
+            setErrorMessage('Enter your username')
             e.preventDefault()
             return
         }
         if (!room) {
-            setErrorMessage("Enter the name of the room")
+            setErrorMessage('Enter the name of the room')
             e.preventDefault()
             return
         }

@@ -1,7 +1,7 @@
-import * as React from "react"
-import { useLocation } from "react-router-dom"
-import { io, Socket } from "socket.io-client"
-import { RoomUsers } from "./RoomUsers"
+import * as React from 'react'
+import {useLocation} from 'react-router-dom'
+import {io, Socket} from 'socket.io-client'
+import {RoomUsers} from './RoomUsers'
 import {
     ClientToServerEvents,
     IMessage,
@@ -9,26 +9,26 @@ import {
     PrivateMessagePayload,
     RoomUsersPayload,
     ServerToClientEvents,
-} from "../utils/interfaces"
-import { MessageSection } from "./MessageSection"
-import { InfoBar } from "./InfoBar"
-import { InputBar } from "./InputBar"
+} from '../utils/interfaces'
+import {MessageSection} from './MessageSection'
+import {InfoBar} from './InfoBar'
+import {InputBar} from './InputBar'
 
-import classes from "./Chat.module.css"
+import classes from './Chat.module.css'
 
-const ENDPOINT = "localhost:3000"
+const ENDPOINT = 'localhost:3000'
 
 const isMessageOwner = (name: string, messageAuthor: string) =>
-    name.replace(" ", "").trim().toLowerCase() === messageAuthor.replace(" ", "").trim().toLowerCase()
+    name.replace(' ', '').trim().toLowerCase() === messageAuthor.replace(' ', '').trim().toLowerCase()
 
 export const Chat = () => {
-    const { search } = useLocation()
+    const {search} = useLocation()
     const queryParams = new URLSearchParams(search)
 
-    const [name] = React.useState(queryParams.get("name") ?? "")
-    const [room] = React.useState(queryParams.get("room") ?? "")
+    const [name] = React.useState(queryParams.get('name') ?? '')
+    const [room] = React.useState(queryParams.get('room') ?? '')
 
-    const [message, setMessage] = React.useState("")
+    const [message, setMessage] = React.useState('')
     const [messages, setMessages] = React.useState<IMessage[]>([])
 
     const [showUsers, setShowUsers] = React.useState<boolean>(false)
@@ -36,7 +36,7 @@ export const Chat = () => {
     const [roomUsers, setRoomUsers] = React.useState<string[]>([])
 
     const [isPrivateMessage, setIsPrivateMessage] = React.useState<boolean>(false)
-    const [privateMessageUser, setPrivateMessageUser] = React.useState<string>("")
+    const [privateMessageUser, setPrivateMessageUser] = React.useState<string>('')
 
     const [socket, setSocket] = React.useState<Socket<ServerToClientEvents, ClientToServerEvents>>(io(ENDPOINT))
 
@@ -46,7 +46,7 @@ export const Chat = () => {
         const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(ENDPOINT)
         setSocket(socket)
 
-        socket.emit("join", name, room, errorMessage => alert(errorMessage))
+        socket.emit('join', name, room, errorMessage => alert(errorMessage))
 
         return () => {
             socket.disconnect()
@@ -57,17 +57,17 @@ export const Chat = () => {
     }, [search, name, room])
 
     React.useEffect(() => {
-        socket.on("message", (message: MessagePayload) => setMessages(prevMessages => [...prevMessages, message]))
+        socket.on('message', (message: MessagePayload) => setMessages(prevMessages => [...prevMessages, message]))
     }, [socket])
 
     React.useEffect(() => {
-        socket.on("privateMessage", (message: PrivateMessagePayload) =>
+        socket.on('privateMessage', (message: PrivateMessagePayload) =>
             setMessages(prevMessages => [...prevMessages, message])
         )
     }, [socket])
 
     React.useEffect(() => {
-        socket.on("roomUsers", (roomUsers: RoomUsersPayload) => {
+        socket.on('roomUsers', (roomUsers: RoomUsersPayload) => {
             setRoomUsers(roomUsers.users)
         })
     }, [socket])
@@ -85,12 +85,12 @@ export const Chat = () => {
         }
 
         socket.emit(
-            "sendMessage",
+            'sendMessage',
             {
                 user: name,
                 text: message,
             },
-            () => setMessage("")
+            () => setMessage('')
         )
     }
 
@@ -103,7 +103,7 @@ export const Chat = () => {
         }
 
         socket.emit(
-            "sendPrivateMessage",
+            'sendPrivateMessage',
             {
                 user: name,
                 targetUser: privateMessageUser,
@@ -111,7 +111,7 @@ export const Chat = () => {
                 isPrivate: true,
             },
             () => {
-                setMessage("")
+                setMessage('')
             }
         )
     }
@@ -132,7 +132,7 @@ export const Chat = () => {
 
     const onClickPrivateMessageHandler = () => {
         setIsPrivateMessage(false)
-        setPrivateMessageUser("")
+        setPrivateMessageUser('')
     }
 
     return (

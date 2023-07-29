@@ -1,4 +1,4 @@
-import classes from "./RoomUsers.module.css"
+import classes from './RoomUsers.module.css'
 
 interface RoomUsersProps {
     users: string[]
@@ -7,7 +7,7 @@ interface RoomUsersProps {
 }
 
 export const RoomUsers = (props: RoomUsersProps) => {
-    const { users, onClickShowUsersHandler, privateMessageHandler } = props
+    const {users, onClickShowUsersHandler, privateMessageHandler} = props
 
     return (
         <div className={classes.containerOuter}>

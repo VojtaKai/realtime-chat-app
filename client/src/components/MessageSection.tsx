@@ -1,8 +1,8 @@
-import React from "react"
-import ScrollToTheBottom from "react-scroll-to-bottom"
-import classes from "./MessageSection.module.css"
-import { IMessage } from "../utils/interfaces"
-import { Message } from "./Message"
+import React from 'react'
+import ScrollToTheBottom from 'react-scroll-to-bottom'
+import classes from './MessageSection.module.css'
+import {IMessage} from '../utils/interfaces'
+import {Message} from './Message'
 
 interface MessageSectionProps {
     name: string
@@ -13,7 +13,7 @@ interface MessageSectionProps {
 }
 
 export const MessageSection = (props: MessageSectionProps) => {
-    const { name, messages, isMessageOwner, setIsPrivateMessage, setPrivateMessageUser } = props
+    const {name, messages, isMessageOwner, setIsPrivateMessage, setPrivateMessageUser} = props
     return (
         <ScrollToTheBottom
             className={classes.chatMessageSection}

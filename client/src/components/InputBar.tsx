@@ -1,7 +1,7 @@
-import React from "react"
-import { AiOutlineStop } from "react-icons/ai"
+import React from 'react'
+import {AiOutlineStop} from 'react-icons/ai'
 
-import classes from "./InputBar.module.css"
+import classes from './InputBar.module.css'
 
 interface InputBarProps {
     message: string
@@ -36,8 +36,8 @@ export const InputBar = React.forwardRef(
                             <AiOutlineStop
                                 size={16}
                                 style={{
-                                    alignSelf: "center",
-                                    cursor: "pointer",
+                                    alignSelf: 'center',
+                                    cursor: 'pointer',
                                 }}
                                 onClick={onClickPrivateMessageHandler}
                             />
@@ -49,10 +49,10 @@ export const InputBar = React.forwardRef(
                                 onChange={onChangeMessageHandler}
                                 placeholder="Type a message"
                                 value={message}
-                                onKeyDown={e => e.key === "Enter" && onClickSendPrivate(e)}
+                                onKeyDown={e => e.key === 'Enter' && onClickSendPrivate(e)}
                             />
                             <button type="button" onClick={onClickSendPrivate} className={classes.messageSendButton}>
-                                {"Send"}
+                                {'Send'}
                             </button>
                         </div>
                     </div>
@@ -64,10 +64,10 @@ export const InputBar = React.forwardRef(
                             onChange={onChangeMessageHandler}
                             placeholder="Type a message"
                             value={message}
-                            onKeyDown={e => e.key === "Enter" && onClickSend(e)}
+                            onKeyDown={e => e.key === 'Enter' && onClickSend(e)}
                         />
                         <button type="button" onClick={onClickSend} className={classes.messageSendButton}>
-                            {"Send"}
+                            {'Send'}
                         </button>
                     </div>
                 )}

@@ -1,18 +1,18 @@
-import "./App.css"
-import { RouterProvider, createBrowserRouter } from "react-router-dom"
-import { Join } from "./components/Join"
-import { Chat } from "./components/Chat"
-import { ErrorElement } from "./components/Error"
+import './App.css'
+import {RouterProvider, createBrowserRouter} from 'react-router-dom'
+import {Join} from './components/Join'
+import {Chat} from './components/Chat'
+import {ErrorElement} from './components/Error'
 
 function App() {
     const router = createBrowserRouter([
         {
-            path: "/",
+            path: '/',
             element: <Join />,
             errorElement: <ErrorElement />,
         },
         {
-            path: "/chat",
+            path: '/chat',
             element: <Chat />,
             errorElement: <ErrorElement />,
         },
